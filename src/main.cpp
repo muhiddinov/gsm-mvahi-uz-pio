@@ -246,12 +246,6 @@ void setup() {
   sensor.setResolution(10);
   ++bootCount;
   Serial.printf("Boot count: %d\n", bootCount);
-  uint8_t pwr_counter = 0;
-  while (!powerUpSimCom()) {
-     if (pwr_counter ++ >= 3) break;
-     delay(3000);
-  }
-
   temperature = getTemperature();
   uint16_t dist = getDistance();
   Serial.printf("Distance: %d\n", dist);
@@ -259,6 +253,13 @@ void setup() {
     Serial.print("Old dist: "); Serial.print(dist_mm);
     Serial.print("Current dist: "); Serial.println(dist);
     dist_mm = dist;
+    
+    uint8_t pwr_counter = 0;
+    while (!powerUpSimCom()) {
+      if (pwr_counter ++ >= 3) break;
+      delay(3000);
+    }
+
     while (imei.length() < 10) {
       imei = getIMEI();
       delay(1000);
